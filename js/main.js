@@ -1,4 +1,14 @@
 (function($) {
+  //Firebase Functionalities
+  firebase.auth().onAuthStateChanged(firebaseUser => {
+    if (firebaseUser) {
+      console.log("Logged In");
+    } else {
+      console.log("Logged Out");
+      window.location.href = "./SignIn.html";
+    }
+  });
+
   $(window).scroll(function() {
     if ($(this).scrollTop() > 100) {
       $(".scrollup").fadeIn();
@@ -44,11 +54,11 @@
     $(".navbar-collapse").addClass("collapse");
   });
 
-  // const testMe = document.getElementById("testMe");
+  const testMe = document.getElementById("testMe");
 
-  // testMe.addEventListener("click", e => {
-  //   firebase.auth().signOut();
-  // });
+  testMe.addEventListener("click", e => {
+    firebase.auth().signOut();
+  });
 
   // fancybox
   jQuery(".fancybox").fancybox();
