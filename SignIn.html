@@ -7,32 +7,61 @@
       rel="stylesheet"
       href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
     />
+    <link rel="stylesheet" href="css/login.css" />
     <script src="https://www.gstatic.com/firebasejs/7.9.3/firebase.js"></script>
   </head>
   <body>
-    <div class="container">
-      <div class="jumbotron">
-        <input id="txtEmail" type="email" placeholder="Email" />
-
-        <input id="txtPassword" type="password" placeholder="Password" />
-
-        <button id="btnLogin" class="btn btn-primary">
-          Log In
-        </button>
-
-        <button id="btnSignUp" class="btn btn-secondary">
-          Sign Up
-        </button>
-
-        <button id="btnLogout1" class="btn btn-info">
-          Log Out
-        </button>
+    <div class="sidenav">
+      <div class="login-main-text">
+        <h2>
+          Smart Fleet Management<br />
+          Login
+        </h2>
+      </div>
+    </div>
+    <div class="main">
+      <div class="col-md-6 col-sm-12">
+        <div class="login-form">
+          <form>
+            <div class="form-group">
+              <!-- <label>E-Mail</label> -->
+              <input
+                type="text"
+                class="form-control"
+                placeholder="E-Mail"
+                id="txtEmail"
+              />
+            </div>
+            <div class="form-group">
+              <!-- <label>Password</label> -->
+              <input
+                type="password"
+                class="form-control"
+                placeholder="Password"
+                id="txtPassword"
+              />
+            </div>
+            <button type="button" class="btn btn-black" id="btnLogin">
+              Login
+            </button>
+            <button type="button" class="btn btn-secondary" id="btnSignUp">
+              Register
+            </button>
+            <button
+              type="button"
+              class="btn btn-danger"
+              id="btnLogout"
+              style="display: none;"
+            >
+              Log Out
+            </button>
+          </form>
+        </div>
       </div>
     </div>
 
     <!-- The core Firebase JS SDK is always required and must be listed first -->
     <script>
-      // Your web app's Firebase configuration
       var firebaseConfig = {
         apiKey: "AIzaSyCuQuA5tdF7XSr84eJ96__TR6z3tA8mgg4",
         authDomain: "smart-vehicle-69bf2.firebaseapp.com",
