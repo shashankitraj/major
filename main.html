@@ -310,34 +310,38 @@
 
     <!-- <script src="js/app.js"></script> -->
     <script src="js/firebaseInit.js"></script>
+    <script src="js/firebaseData.js"></script>
     <script src="js/main.js"></script>
 
     <!-- Fetching data for map -->
-    <script >
+    <script>
       var useUid;
-    firebase.auth().onAuthStateChanged(firebaseUser => {
-      if (firebaseUser) {
-        userUid=firebaseUser.uid;
-        email=firebaseUser.email;
-        //console.log(user);
-        //console.log(email);
-        var ref=firebase.database().ref("/Gps Details");
-    console.log(ref);
-    ref.child(firebaseUser.uid).once('value',   function(snapshot) {
-    snapshot.forEach(function(childSnapshot) {
-      // var childKey = childSnapshot.key;
-      // var childData = childSnapshot.val().time;
-      // console.log(childKey);
-      // console.log(childData);
-      console.log(childSnapshot);
-    });
-  });
-      } else {
-        console.log("Logged Out");
-        window.location.href = "./SignIn.html";
-      }
-    });
-    
+      firebase.auth().onAuthStateChanged(firebaseUser => {
+        if (firebaseUser) {
+          userUid = firebaseUser.uid;
+          email = firebaseUser.email;
+          // console.log(userUid);
+          // console.log(email);
+          getData();
+          // var obj = firebase
+          //   .database()
+          //   .ref("Uid")
+          //   .child("0");
+          // console.log(obj);
+          // obj.child(firebaseUser.uid).once("value", function(snapshot) {
+          //   snapshot.forEach(function(childSnapshot) {
+          //     // var childKey = childSnapshot.key;
+          //     // var childData = childSnapshot.val().time;
+          //     // console.log(childKey);
+          //     // console.log(childData);
+          //     console.log(childSnapshot);
+          //   });
+          // });
+        } else {
+          console.log("Logged Out");
+          window.location.href = "./SignIn.html";
+        }
+      });
     </script>
   </body>
 </html>
