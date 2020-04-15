@@ -14,6 +14,15 @@ function getData() {
   ref.once("value", gotData);
   function gotData(data) {
     var usrData = data.val();
-    console.log(usrData);
+    for (var child in usrData) {
+      var children = usrData[child];
+      for (var grandchild in children) {
+        var grandchildren = children[grandchild];
+        console.log("Altitude = " + grandchildren.altitude);
+        console.log("Latitude = " + grandchildren.latitude);
+        console.log("Longitude = " + grandchildren.longitude);
+      }
+    }
+    // console.log(typeof usrData);
   }
 }
