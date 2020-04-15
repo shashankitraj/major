@@ -1,5 +1,5 @@
 function getData() {
-  firebase.auth().onAuthStateChanged(user => {
+  firebase.auth().onAuthStateChanged((user) => {
     if (user) {
       // User logged in already or has just logged in.
       console.log(user.uid);
