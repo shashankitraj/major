@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingLeft="24dp"
+    android:paddingTop="56dp"
+    android:paddingRight="24dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Login"
+        android:textAlignment="center"
+        android:textSize="35dp"
+        android:layout_marginTop="50sp"/>
+
+    <EditText
+        android:id="@+id/editTextEmailLogin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="46dp"
+        android:focusable="true"
+        android:hint="Email"
+        android:textColorHighlight="#000000"
+        android:textColorHint="#000000"
+        android:inputType="textEmailAddress"/>
+
+    <EditText
+        android:id="@+id/editTextPasswordLogin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Password"
+        android:inputType="textPassword"
+        android:textColorHint="#0C0C0C" />
+
+
+
+    <Button
+        android:id="@+id/buttonLogin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="20sp"
+        android:text="login" />
+    <TextView
+        android:id="@+id/textviewLogin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="New Member Click here to Register."
+        android:textAlignment="center"
+        android:textSize="15dp"
+        android:layout_marginTop="10dp"
+        android:textColor="#000000"
+        android:clickable="true"/>
+
+
+</LinearLayout>

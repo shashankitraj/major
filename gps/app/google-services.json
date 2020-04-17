@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "332395035191",
+    "firebase_url": "https://smart-vehicle-69bf2.firebaseio.com",
+    "project_id": "smart-vehicle-69bf2",
+    "storage_bucket": "smart-vehicle-69bf2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:332395035191:android:614181376aaf5936a7ddb2",
+        "android_client_info": {
+          "package_name": "com.example.gps"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "332395035191-8lbrc1cufl7tsra6ijv88t42r9ba07jt.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.gps",
+            "certificate_hash": "2997be652c0c4d91f4d764e38ed0667d1176c1f1"
+          }
+        },
+        {
+          "client_id": "332395035191-03vll0uckb4frde7grs2ig8gltlo2q7a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDlK5Cqay_Di_hauKhBRacfe76O7E1Ms2Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "332395035191-03vll0uckb4frde7grs2ig8gltlo2q7a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

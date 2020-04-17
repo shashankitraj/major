@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingLeft="24dp"
+    android:paddingTop="50dp"
+    android:paddingRight="24dp">
+
+    <TextView
+        android:id="@+id/textview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:text="Register"
+        android:textAlignment="center"
+        android:textSize="35dp"
+        android:layout_marginTop="50sp"/>
+    <EditText
+        android:id="@+id/editTextName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="46dp"
+        android:focusable="true"
+        android:hint="Name"
+        android:inputType="textPersonName"
+        android:textColorHighlight="#000000"
+        android:textColorHint="#000000" />
+
+    <EditText
+        android:id="@+id/editTextEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:focusable="true"
+        android:hint="Email"
+        android:textColorHighlight="#000000"
+        android:inputType="textEmailAddress"
+        android:textColorHint="#000000" />
+
+    <EditText
+        android:id="@+id/editTextPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Password"
+        android:inputType="textPassword"
+        android:textColorHint="#0C0C0C" />
+    <EditText
+        android:id="@+id/editTextPhone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Number"
+        android:inputType="phone"
+        android:textColorHint="#0C0C0C" />
+    <EditText
+        android:id="@+id/editTextRfid"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:focusable="true"
+        android:hint="RFID"
+        android:inputType="text"
+        android:textColorHighlight="#000000"
+        android:textColorHint="#000000" />
+
+
+    <CheckBox
+        android:id="@+id/checkBoxSignup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="I Accept all terms and conditions."
+        android:layout_gravity="center"/>
+
+    <Button
+        android:id="@+id/buttonSignup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="20sp"
+        android:text="Register" />
+
+    <TextView
+        android:id="@+id/textviewRegister"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Already Registered Click here to login."
+        android:textAlignment="center"
+        android:textSize="15dp"
+        android:layout_marginTop="10dp"
+        android:textColor="#000000"
+        android:clickable="true"/>
+
+
+
+</LinearLayout>
