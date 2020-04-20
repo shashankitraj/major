@@ -24,9 +24,11 @@ public class UserDetails {
         this.rfid = rfid;
     }
 
+    //Empty Constructor
     public UserDetails() {
     }
 
+    //Getter and setter for all global variables.
     public String getName() {
         return name;
     }

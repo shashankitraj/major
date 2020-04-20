@@ -28,6 +28,8 @@ public class GpsDetails {
         this.email=email;
     }
 
+    //Getter and setter for all global variables.
+
     public String getEmail() {
         return email;
     }

@@ -1,7 +1,9 @@
 <resources>
-    <string name="app_name">SimpleLocationApp</string>
+    <string name="app_name">GPS App</string>
 
     <string name="pause">Pause Location Updates</string>
     <string name="resume">Resume Location Updates</string>
+    <string name="signupText">Already Registered <u><b>Click</b></u> here to login.</string>
+    <string name="loginText">New Member <u><b>Click</b></u> here to Register.</string>
 
 </resources>

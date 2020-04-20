@@ -10,6 +10,8 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -39,27 +41,52 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-
+/*
+    * Main Activity for the app
+    * Contains all the information and sends information of the GPS to firebase.
+    * Contains logout button for logging out user.
+    * Structure for storing GPS Details:
+     -root
+      --<User1_uid>
+        --Date and time(date and time of saving data)
+          --altitude
+          --speed
+          --latitude
+          --longitude
+          --date
+          --time
+          --email
+        --Date and time(date and time of saving data)
+          --altitude
+          --speed
+          --latitude
+          --longitude
+          --date
+          --time
+          --email
+*/
 public class MainActivity extends AppCompatActivity {
-
-    LocationManager locationManager;
-    double longitudeGPS, latitudeGPS;
-    double speed,altitude;
-    String request="";
+    LocationManager locationManager;//Location Manager for GPS of the mobile
+    double longitudeGPS, latitudeGPS;//Stores the latitude and longitude
+    double speed,altitude;// Speed and altitude
+    String request=""; // The request from Thingspeak is served at this vatiable . It is a JSON object.
+    //Variables for UI Elements and Firebase Auth instance.
     TextView longitudeValueGPS, latitudeValueGPS;
     TextView speedValueGPS,altitudeValueGPS;
     TextView cardStatus;
-    Button locationControllerGps,btnLogout,btnGetStatus;
+    Button locationControllerGps,btnGetStatus;
     private FirebaseAuth mAuth;
     private FirebaseDatabase database;
-    private DatabaseReference dbRef,userRef,uref;
-    ArrayList<UserDetails> userDetail=new ArrayList<UserDetails>();
-    ArrayList<RFIDDetails> rfidDetail=new ArrayList<RFIDDetails>();
-    boolean flag=false;
+    private DatabaseReference dbRef,userRef,uref;//Database reference for diffrent opereations
+    ArrayList<UserDetails> userDetail=new ArrayList<UserDetails>();//Array list to store user Details fetch from firebase.
+    ArrayList<RFIDDetails> rfidDetail=new ArrayList<RFIDDetails>();//Array list to store rfid details from firebase
+    boolean flag=false;//Used to check if the users card is scanned or not.
+    //Once the card is scanned then flag is set true.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //getting the Location Manager instance for GPS.
         locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
         locationControllerGps=findViewById(R.id.locationControllerGPS);
         locationControllerGps.setOnClickListener(new View.OnClickListener() {
@@ -73,33 +100,56 @@ public class MainActivity extends AppCompatActivity {
         speedValueGPS=findViewById(R.id.speedValueGPS);
         altitudeValueGPS=findViewById(R.id.altitudeValueGPS);
         cardStatus=findViewById(R.id.CardStatus);
-        btnLogout=findViewById(R.id.buttonLogout);
         btnGetStatus=findViewById(R.id.buttonRefreshStatus);
         mAuth=FirebaseAuth.getInstance();
-        btnLogout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(mAuth.getCurrentUser()!=null){
-                    mAuth.signOut();
-                    startActivity(new Intent(getApplicationContext(),Login.class));
-                }
-            }
-        });
+        //button click listener for logging out the user.
+
+        //Button click listener to check if the RFID card is scanned by the user or not.
         btnGetStatus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getData();
             }
         });
+        //Different database reference.
         database=FirebaseDatabase.getInstance();
         dbRef=database.getReference("Gps Details");
         userRef=database.getReference("User Details");
         uref=database.getReference("Uid");
-
-
     }
 
+    //creating menu for topbar
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    //creating action for button of meun
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()) {
+        case R.id.profile:
+            startActivity(new Intent(getApplicationContext(),UserProfile.class));
+            return(true);
+        case R.id.exit:
+            android.os.Process.killProcess(android.os.Process.myPid());
+            System.exit(0b1);
+            return(true);
+
+    }
+        return(super.onOptionsItemSelected(item));
+    }
+
+
+    //Getting the data from the Thingspeak server and parsing the data.
+    //Thingspeak return data as a JSON object.
+    //Using Volley to implement HTTP Get requests from the server.
+    //Data from the RFID Hardware goes into the THINGSPEAK server in a channel created .
+    //The Channel contains : RFID card number , Date and time of data upload(generated by the Thingspeak server)
     public void getData(){
+        //Url to run the HTTP Get Request.
         final String url = "https://api.thingspeak.com/channels/1009719/fields/1.json?api_key=JHU9FNCAY9BPA04B&timezone=Asia/Kolkata";
         RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
         try {
@@ -116,11 +166,19 @@ public class MainActivity extends AppCompatActivity {
                     Log.i("Uid","Error");
                 }
             });
-            requestQueue.add(jsonObjectRequest);
+            requestQueue.add(jsonObjectRequest);//Executing the url.
         } catch (Exception e) {
             e.printStackTrace();
         }
         Log.i("Uid",request);
+        //Parsing the JSON object and storing them into Firebase
+        // Database structure:
+        // --root
+        //   --Uid
+        //     --(Integer count for all feeds)
+        //       --date
+        //       --time
+        //       --uid
         JSONObject rootObject = null;
         RFIDDetails rfidDetails;
         try {
@@ -131,12 +189,17 @@ public class MainActivity extends AppCompatActivity {
                 rfidDetails=new RFIDDetails(temp.optString("created_at"),temp.optString("field1"));
                 uref.child(Integer.toString(i)).setValue(rfidDetails);
             }
-            checkStatus();
+            checkStatus();//calling the check function so that it checks for RFID card scanned or not.
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
+    //function so that it checks for RFID card scanned or not.
+    //Checks if the user has scanned the card within the past 10 min or not.
+    // If so then card status is changed to RFID card scanned.
     void checkStatus(){
+        //getting user details at userDetails array list
+        //implement for async behaviour.
         getUserDetails(new MyCallbackUser() {
             @Override
             public void onCallback(ArrayList<UserDetails> userDetails) {
@@ -147,7 +210,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         //cardStatus.setText(Integer.toString(userDetail.size()));
-
+        //getting rfid details at rfidDetails array list
+        //implement for async behaviour.
         getRFIDDetails(new MyCallbackRfid() {
             @Override
             public void onCallback(ArrayList<RFIDDetails> rfidDetails) {
@@ -158,12 +222,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         //cardStatus.setText(Integer.toString(rfidDetail.size()));
+        //checking for the index of the current user in the array list.
         int ind=0;
         for(int i=0;i<userDetail.size();i++){
             if(mAuth.getCurrentUser().getEmail().equals(userDetail.get(i).getEmail())){
                 ind=i;
             }
         }
+        //getting the latest date and time for the user.
         String d="",t="";
         for(int i=0;i<rfidDetail.size();i++){
             if(userDetail.get(ind).getRfid().equals(rfidDetail.get(i).getUid())){
@@ -171,8 +237,9 @@ public class MainActivity extends AppCompatActivity {
                 t=rfidDetail.get(i).getTime();
             }
         }
-        String date=getDate();
-        String time=getTime();
+        String date=getDate();//current date
+        String time=getTime();//current time
+        //comparing to check if user scanned card in last 10 min or not.
         int h=0,h1=0;
         int m=0,m1=0;
         h=Integer.parseInt(time.substring(0,2));
@@ -197,6 +264,8 @@ public class MainActivity extends AppCompatActivity {
                 cardStatus.setText("Scan the card again and try again.");
         }
     }
+    //Get Details of the User from the Firebase Database
+    //Stored in array list of userDetails.
     public void getUserDetails(final MyCallbackUser myCallbackUser){
         final ArrayList<UserDetails> userDetails=new ArrayList<UserDetails>();
         userRef=database.getReference("User Details");
@@ -213,6 +282,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+    //Get Details of the User from the Firebase Database
+    //Stored in array list of rfidDetails.
     public void getRFIDDetails(final MyCallbackRfid myCallbackRfid){
         final ArrayList<RFIDDetails> rfidDetails=new ArrayList<RFIDDetails>();
         uref=database.getReference("Uid");
@@ -230,17 +301,25 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+    //Interface is implemented in order to counter the Async behaviour of firebase .
+    //Firebase uses Async behaviour.
+    //Async: Doing the task on a secondary thread. While other tasks are being performed.
+    //Main thread can perform other task as the secondary thread is working to fetch database.
     public interface MyCallbackUser{
         void onCallback(ArrayList<UserDetails> userDetails);
     }
     public interface MyCallbackRfid{
         void onCallback(ArrayList<RFIDDetails> rfidDetails);
     }
+    //Check location function will check if the location setting for the device is on or not.
     private boolean checkLocation() {
         if(!isLocationEnabled())
+            //calling show alert function for location setting off.
             showAlert();
         return isLocationEnabled();
     }
+    //Function for checking if location setting is switched on or not.
+    //Creating the alert dialog to show location permission.
     private void showAlert() {
         final AlertDialog.Builder dialog = new AlertDialog.Builder(this);
         dialog.setTitle("Enable Location")
@@ -260,10 +339,15 @@ public class MainActivity extends AppCompatActivity {
                 });
         dialog.show();
     }
+    //Check location is enabled and Network setting is enabled.
     private boolean isLocationEnabled() {
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) ||
                 locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
     }
+    //function called when the user press the button for getting location.
+    //location manager checks the location permission.
+    //updates location if location is updatd by 10 meters or in (2*60*1000) seconds.
+    // locationListenerGPS is called through location manager for accessing data from gps as a location object.
     @SuppressLint("MissingPermission")
     public void toggleGPSUpdates() {
         if(!checkLocation())
@@ -278,16 +362,21 @@ public class MainActivity extends AppCompatActivity {
             locationControllerGps.setText(R.string.pause);
         }
     }
+
+    //Function for getting the date in yyyy-MM-dd format.
     public String getDate(){
         SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM-dd");
         Date date=new Date();
         return simpleDateFormat.format(date);
     }
+    //Function for getting the time in HH-mm-ss format.
     public String getTime(){
         SimpleDateFormat simpleDateFormat1=new SimpleDateFormat("HH:mm:ss");
         Date date1=new Date();
         return simpleDateFormat1.format(date1);
     }
+    //Location manager function that returns the location of the device using inbuild GPS.
+    //Gives the location when location is updated.
     private final LocationListener locationListenerGPS = new LocationListener() {
         public void onLocationChanged(Location location) {
             longitudeGPS = location.getLongitude();
@@ -304,11 +393,13 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(MainActivity.this, "GPS Provider update", Toast.LENGTH_SHORT).show();
                 }
             });
-            String d=getDate();
-            String t=getTime();
+            String d=getDate();//get current date
+            String t=getTime();//get current time
+            //get current users email
             String email=mAuth.getCurrentUser().getEmail();
+            //storing the values in firebase.
             GpsDetails gpsDetails=new GpsDetails(latitudeGPS,longitudeGPS,speed,altitude,email,d,t);
-            String ref=d+" "+t;
+            String ref=d+" "+t;//combining the data and time for getting key for storing in database
             dbRef.child(mAuth.getUid()).child(ref).setValue(gpsDetails);
 
             /*
@@ -343,6 +434,7 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+    //action to perform on back button performed.
     @Override
     public void onBackPressed() {
         if(mAuth.getCurrentUser()!=null){

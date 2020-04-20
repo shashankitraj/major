@@ -19,9 +19,11 @@ public class RFIDDetails {
         this.uid = uid;
     }
 
+    //Empty constructor
     public RFIDDetails() {
     }
 
+    //Getter and Setter for local variable.
     public String getDate() {
         return date;
     }

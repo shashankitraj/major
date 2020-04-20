@@ -25,15 +25,16 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 /*
- // Signup page : Page used to Signup new users.
- // Inputs: Name , Email , Password , Phone_No and RFID Number.
- // Email is used to send verification email.
- // Password is of length greater than 6.
- // RFID is unique RFID number assigned to each user . This number is unique and is assigned to each user during signup.
- // Check box is just to add fancy looks. Could add conditions later.
- // Upon registration of the user the user is sent a verification email to verify the email.
- // Using Firebase Auth to register users.
- // Firebase refernece: Stores the Name,Email,Phone no,RFID in following structure:
+ * Signup page : Page used to Signup new users.
+ * Inputs: Name , Email , Password , Phone_No and RFID Number.
+ * Email is used to send verification email.
+ * Password is of length greater than 6.
+ TODO: Add string check for password. For better password conditions.
+ * RFID is unique RFID number assigned to each user . This number is unique and is assigned to each user during signup.
+ * Check box is just to add fancy looks. Could add conditions later.
+ * Upon registration of the user the user is sent a verification email to verify the email.
+ * Using Firebase Auth to register users.
+ * Firebase refernece: Stores the Name,Email,Phone no,RFID in following structure:
    root
     --User Details
      - <User Uid 1>
@@ -46,7 +47,7 @@ import java.time.format.DateTimeFormatter;
        --Email
        --Phone
        --RFID
-  //This can be used to get info of the user and can be used later.
+  *This can be used to get info of the user and can be used later.
  */
 public class Signup extends AppCompatActivity {
     TextView textView;
