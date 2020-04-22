@@ -1,9 +1,20 @@
 <resources>
-    <string name="app_name">GPS App</string>
+    <string name="app_name">Smart Vehicle</string>
 
     <string name="pause">Pause Location Updates</string>
     <string name="resume">Resume Location Updates</string>
     <string name="signupText">Already Registered <u><b>Click</b></u> here to login.</string>
     <string name="loginText">New Member <u><b>Click</b></u> here to Register.</string>
+    <string name="login">Login</string>
+    <string name="signup">Signup</string>
+    <string name="Password">Password</string>
+    <string name="email">Email</string>
+    <string name="name">Name</string>
+    <string name="rfid">RFID Number</string>
+    <string name="phone">Phone Number</string>
+    <string name="carImage">Vector Logo Image of Car</string>
+    <string name="personImage">Vector Image of Person</string>
+    <string name="LockImage">Vector Image of Lock for Password</string>
+
 
 </resources>

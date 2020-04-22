@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,6 +38,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -75,12 +77,15 @@ public class MainActivity extends AppCompatActivity {
     TextView speedValueGPS,altitudeValueGPS;
     TextView cardStatus;
     Button locationControllerGps,btnGetStatus;
+    ProgressBar progressBar,progressBar1;
+    String cardDetailsText="RFID Card not scanned.\nPress button to refresh status.";
     private FirebaseAuth mAuth;
     private FirebaseDatabase database;
     private DatabaseReference dbRef,userRef,uref;//Database reference for diffrent opereations
     ArrayList<UserDetails> userDetail=new ArrayList<UserDetails>();//Array list to store user Details fetch from firebase.
     ArrayList<RFIDDetails> rfidDetail=new ArrayList<RFIDDetails>();//Array list to store rfid details from firebase
     boolean flag=false;//Used to check if the users card is scanned or not.
+    boolean isFlag=false; // used to check if there are any entry in thinkspeak of the current users UID number . IF not done the app is stuck in checking mode finding the number.
     //Once the card is scanned then flag is set true.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,17 +94,26 @@ public class MainActivity extends AppCompatActivity {
         //getting the Location Manager instance for GPS.
         locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
         locationControllerGps=findViewById(R.id.locationControllerGPS);
-        locationControllerGps.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                toggleGPSUpdates();
-            }
-        });
         longitudeValueGPS = (TextView) findViewById(R.id.longitudeValueGPS);
         latitudeValueGPS = (TextView) findViewById(R.id.latitudeValueGPS);
         speedValueGPS=findViewById(R.id.speedValueGPS);
         altitudeValueGPS=findViewById(R.id.altitudeValueGPS);
+        progressBar=findViewById(R.id.progressBarMain);
+        progressBar1=findViewById(R.id.progressBarMain1);
+        locationControllerGps.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                longitudeValueGPS.setText("Fetching Value ...");
+                latitudeValueGPS.setText("Fetching Value ...");
+                speedValueGPS.setText("Fetching Value ...");
+                altitudeValueGPS.setText("Fetching Value ...");
+                //progressBar.setVisibility(View.VISIBLE);
+                toggleGPSUpdates();
+            }
+        });
+
         cardStatus=findViewById(R.id.CardStatus);
+        cardStatus.setText(cardDetailsText);
         btnGetStatus=findViewById(R.id.buttonRefreshStatus);
         mAuth=FirebaseAuth.getInstance();
         //button click listener for logging out the user.
@@ -108,6 +122,8 @@ public class MainActivity extends AppCompatActivity {
         btnGetStatus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                progressBar1.setVisibility(View.VISIBLE);
+                cardStatus.setText("Card details fetching.");
                 getData();
             }
         });
@@ -134,8 +150,8 @@ public class MainActivity extends AppCompatActivity {
             startActivity(new Intent(getApplicationContext(),UserProfile.class));
             return(true);
         case R.id.exit:
-            android.os.Process.killProcess(android.os.Process.myPid());
-            System.exit(0b1);
+            this.finish();
+            moveTaskToBack(true);
             return(true);
 
     }
@@ -158,7 +174,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(JSONObject response) {
                     request=response.toString();
-                    Toast.makeText(getApplicationContext(),"Success",Toast.LENGTH_SHORT).show();
+
                 }
             }, new Response.ErrorListener() {
                 @Override
@@ -235,8 +251,10 @@ public class MainActivity extends AppCompatActivity {
             if(userDetail.get(ind).getRfid().equals(rfidDetail.get(i).getUid())){
                 d=rfidDetail.get(i).getDate();
                 t=rfidDetail.get(i).getTime();
+                isFlag=true;
             }
         }
+
         String date=getDate();//current date
         String time=getTime();//current time
         //comparing to check if user scanned card in last 10 min or not.
@@ -245,9 +263,9 @@ public class MainActivity extends AppCompatActivity {
         h=Integer.parseInt(time.substring(0,2));
         m=Integer.parseInt(time.substring(3,5));
         if(t.length()==0){
-            cardStatus.setText("Card details fetching.");
             return;
         }
+
         h1=Integer.parseInt(t.substring(0,2));
         m1=Integer.parseInt(t.substring(3,5));
         if(date.equals(d)){
@@ -257,12 +275,20 @@ public class MainActivity extends AppCompatActivity {
                 h1+=1;
             }
             if(m<=m1 && h1==h || flag==true){
-                cardStatus.setText("Card Scanned.");
+                cardDetailsText="Card Scanned.";
+                cardStatus.setText(cardDetailsText);
                 flag=true;
+                return;
             }
-            else
-                cardStatus.setText("Scan the card again and try again.");
         }
+
+        else{
+            cardDetailsText="Scan the card again and try again.";
+            cardStatus.setText(cardDetailsText);
+        }
+
+        progressBar1.setVisibility(View.GONE);
+
     }
     //Get Details of the User from the Firebase Database
     //Stored in array list of userDetails.
@@ -383,13 +409,30 @@ public class MainActivity extends AppCompatActivity {
             latitudeGPS = location.getLatitude();
             speed=location.getSpeed();
             altitude=location.getAltitude();
+
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    longitudeValueGPS.setText(longitudeGPS + "");
-                    latitudeValueGPS.setText(latitudeGPS + "");
-                    speedValueGPS.setText(speed+"");
-                    altitudeValueGPS.setText(altitude+"");
+                    progressBar.setVisibility(View.INVISIBLE);
+                    String ns="";
+                    String ew="";
+                    if(latitudeGPS >= 0){
+                        ns="N";
+                    }
+                    else{
+                        ns="S";
+                    }
+                    if(longitudeGPS > 0){
+                        ew="E";
+                    }
+                    else {
+                        ew="W";
+                    }
+                    DecimalFormat numberFormat = new DecimalFormat("#.00");
+                    longitudeValueGPS.setText(numberFormat.format(longitudeGPS) + " \u00B0 " +ns);
+                    latitudeValueGPS.setText(numberFormat.format(latitudeGPS) + " \u00B0 " +ew);
+                    speedValueGPS.setText(numberFormat.format(speed)+" m/s");
+                    altitudeValueGPS.setText(altitude+" m");
                     Toast.makeText(MainActivity.this, "GPS Provider update", Toast.LENGTH_SHORT).show();
                 }
             });

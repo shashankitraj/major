@@ -1,10 +1,17 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
     android:orientation="vertical"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="20sp">
+
+
 
         <TextView
             android:id="@+id/titleTextGPS"
@@ -14,6 +21,12 @@
             android:text="GPS LOCATION"
             android:textSize="20sp"
             android:layout_marginTop="40sp"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray"
+            android:layout_below="@+id/titleTextGPS"
+            android:layout_marginTop="10sp"/>
 
         <Button
             android:id="@+id/locationControllerGPS"
@@ -23,96 +36,186 @@
             android:layout_centerHorizontal="true"
             android:text="Get Location"
             android:layout_marginTop="40sp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
             android:layout_marginBottom="20dp"
             android:background="@color/colorPrimary"/>
 
-        <TextView
-            android:id="@+id/longitudeTextGPS"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/locationControllerGPS"
-            android:text="longitude"
-            android:textSize="20sp"
-            android:layout_marginLeft="20sp"/>
+            android:orientation="vertical"
+            android:layout_below="@+id/locationControllerGPS"
+            android:id="@+id/linear0Main"
+            android:gravity="center"
+                >
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="3dp"
+                    android:background="@android:color/darker_gray"
+                    android:layout_marginLeft="30sp"
+                    android:layout_marginRight="30sp"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:layout_margin="10sp"
+                    android:background="@color/lightGray">
+                        <TextView
+                            android:id="@+id/longitudeTextGPS"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/locationControllerGPS"
+                            android:text="Longitude : "
+                            android:textSize="20sp"
+                            android:layout_marginLeft="20sp"/>
 
-        <TextView
-            android:id="@+id/longitudeValueGPS"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/locationControllerGPS"
-            android:layout_toRightOf="@id/longitudeTextGPS"
-            android:text="0.0000"
-            android:textSize="20sp"
-            android:layout_marginLeft="20sp"/>
+                        <TextView
+                            android:id="@+id/longitudeValueGPS"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/locationControllerGPS"
+                            android:layout_toRightOf="@id/longitudeTextGPS"
+                            android:text="Press Button to get Value"
+                            android:textSize="20sp"/>
+                </LinearLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="3dp"
+                    android:background="@android:color/darker_gray"
+                    android:layout_marginLeft="30sp"
+                    android:layout_marginRight="30sp"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:layout_margin="10sp"
+                    android:background="@color/lightGray">
+                        <TextView
+                            android:id="@+id/latitudeTextGPS"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/longitudeTextGPS"
+                            android:text="Latitude : "
+                            android:textSize="20sp"/>
 
-        <TextView
-            android:id="@+id/latitudeTextGPS"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/longitudeTextGPS"
-            android:text="latitude"
-            android:textSize="20sp"
-            android:layout_marginLeft="20sp"/>
+                        <TextView
+                            android:id="@+id/latitudeValueGPS"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/longitudeValueGPS"
+                            android:layout_toRightOf="@id/longitudeTextGPS"
+                            android:text="Press Button to get Value"
+                            android:textSize="20sp"/>
+                </LinearLayout>
 
-        <TextView
-            android:id="@+id/latitudeValueGPS"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/longitudeValueGPS"
-            android:layout_toRightOf="@id/longitudeTextGPS"
-            android:text="0.0000"
-            android:textSize="20sp"
-            android:layout_marginLeft="20sp"/>
-        <TextView
-            android:id="@+id/speedTextGPS"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/latitudeValueGPS"
-            android:text="Speed"
-            android:textSize="20sp"
-            android:layout_marginLeft="20sp"/>
 
-        <TextView
-            android:id="@+id/speedValueGPS"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/latitudeValueGPS"
-            android:layout_toRightOf="@id/speedTextGPS"
-            android:text="0.0000"
-            android:textSize="20sp"
-            android:layout_marginLeft="48sp"/>
-        <TextView
-            android:id="@+id/altitudeTextGPS"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/speedValueGPS"
-            android:text="Altitude"
-            android:textSize="20sp"
-            android:layout_marginLeft="20sp"/>
 
-        <TextView
-            android:id="@+id/altitudeValueGPS"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/speedValueGPS"
-            android:layout_toRightOf="@id/altitudeTextGPS"
-            android:text="0.0000"
-            android:textSize="20sp"
-            android:layout_marginStart="35sp"/>
+            <View
+                    android:layout_width="match_parent"
+                    android:layout_height="3dp"
+                    android:background="@android:color/darker_gray"
+                    android:layout_marginLeft="30sp"
+                    android:layout_marginRight="30sp"/>
+               <LinearLayout
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:layout_gravity="center"
+                   android:gravity="center"
+                   android:layout_margin="10sp"
+                   android:background="@color/lightGray">
+                       <TextView
+                           android:id="@+id/speedTextGPS"
+                           android:layout_width="wrap_content"
+                           android:layout_height="wrap_content"
+                           android:layout_below="@id/latitudeValueGPS"
+                           android:text="Speed : "
+                           android:textSize="20sp"/>
+
+                       <TextView
+                           android:id="@+id/speedValueGPS"
+                           android:layout_width="wrap_content"
+                           android:layout_height="wrap_content"
+                           android:layout_below="@id/latitudeValueGPS"
+                           android:layout_toRightOf="@id/speedTextGPS"
+                           android:text="Press Button to get Value"
+                           android:textSize="20sp"/>
+               </LinearLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="3dp"
+                    android:background="@android:color/darker_gray"
+                    android:layout_marginLeft="30sp"
+                    android:layout_marginRight="30sp"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:layout_margin="10sp"
+                    android:background="@color/lightGray">
+                        <TextView
+                            android:id="@+id/altitudeTextGPS"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/speedValueGPS"
+                            android:text="Altitude : "
+                            android:textSize="20sp"/>
+
+                        <TextView
+                            android:id="@+id/altitudeValueGPS"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Press Button to get Value"
+                            android:layout_below="@id/speedValueGPS"
+                            android:layout_toRightOf="@id/altitudeTextGPS"
+                            android:textSize="20sp" />
+                </LinearLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="3dp"
+                    android:background="@android:color/darker_gray"
+                    android:layout_marginLeft="30sp"
+                    android:layout_marginRight="30sp"/>
+            <ProgressBar
+                android:id="@+id/progressBarMain"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:translationZ="10sp"
+                android:layout_margin="20sp"/>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray"
+            android:layout_above="@+id/CardStatus"
+            android:layout_marginTop="50sp"
+            android:layout_marginBottom="-20sp"/>
 
         <TextView
             android:id="@+id/CardStatus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="RFID Card not scanned."
+            android:text=""
             android:textSize="20sp"
             android:textAlignment="center"
-            android:layout_below="@id/altitudeValueGPS"
-            android:layout_marginTop="20sp"
+            android:layout_below="@id/linear0Main"
+            android:layout_marginTop="40sp"
             android:layout_centerHorizontal="true"
             />
+    <ProgressBar
+        android:layout_below="@id/CardStatus"
+        android:id="@+id/progressBarMain1"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:translationZ="10sp"
+        android:layout_margin="5sp"/>
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -120,11 +223,10 @@
             android:layout_marginTop="20dp"
             android:text="Refresh Status"
             android:id="@+id/buttonRefreshStatus"
-            android:layout_below="@id/CardStatus"
+            android:layout_below="@id/progressBarMain1"
             android:layout_centerHorizontal="true"
             android:background="@color/colorPrimary"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginBottom="20dp"
+            android:layout_marginBottom="30dp"
             />
     </RelativeLayout>
+</ScrollView>

@@ -5,7 +5,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -23,13 +25,13 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.regex.Pattern;
 
 /*
  * Signup page : Page used to Signup new users.
  * Inputs: Name , Email , Password , Phone_No and RFID Number.
  * Email is used to send verification email.
  * Password is of length greater than 6.
- TODO: Add string check for password. For better password conditions.
  * RFID is unique RFID number assigned to each user . This number is unique and is assigned to each user during signup.
  * Check box is just to add fancy looks. Could add conditions later.
  * Upon registration of the user the user is sent a verification email to verify the email.
@@ -109,46 +111,94 @@ public class Signup extends AppCompatActivity {
         final String name=etName.getText().toString().trim();
         final String phone=etPhone.getText().toString().trim();
         final String rfid=etRfid.getText().toString().trim();
-        //Checkig password length greater than 6
+        //Checking password length greater than 6
         //To add the password check for better password.
-        if(password.length()<6){
-            Toast.makeText(getApplicationContext(),"Password length must be greater than 6.",Toast.LENGTH_SHORT).show();
-        }
-        //Checking if checkbox is checked or not.
-        if(!checkBox.isChecked()){
-            //Toast if checkbox is not checked.
-            Toast.makeText(getApplicationContext(),"Agree to terms and conditions to register.",Toast.LENGTH_SHORT).show();
-        }
-        //Password length is greater than 6 and checkbox is cheked then user is registered.
-        else {
+        if(name.length()==0)
+            setError(etName);
+        if(password.length()==0)
+            setError(etPassword);
+        if(email.length()==0)
+            setError(etEmail);
+        if(phone.length()==0)
+            setError(etPhone);
+        if(rfid.length()==0)
+            setError(etRfid);
+        else{
+            if(!isValidPassword(password)){
+                Toast.makeText(getApplicationContext(),"Password must contain 1 Alphabet, 1 Number and 1 Special Character\n" +
+                        " Special Character allowed: ! , @ , # , $",Toast.LENGTH_SHORT).show();
+                etPassword.setError("Password not valid.");
+            }
+            else if(!checkEmail(email)){
+                etEmail.setError("Email not valid.");
+            }
+            else{
+                //Checking if checkbox is checked or not.
+                if(!checkBox.isChecked()){
+                    //Toast if checkbox is not checked.
+                    Toast.makeText(getApplicationContext(),"Agree to terms and conditions to register.",Toast.LENGTH_SHORT).show();
+                }
+                //Password length is greater than 6 and checkbox is cheked then user is registered.
+                else {
 
-            //Create user with email and password.
-            mAuth.createUserWithEmailAndPassword(email, password)
-                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()) {
-                                // Sign in success, update UI with the signed-in user's information
-                                //Sending the user the email to verify.
-                                FirebaseUser Fuser = FirebaseAuth.getInstance().getCurrentUser();
-                                Fuser.sendEmailVerification();
-                                //Storing name , email , phone , rfid through the UserDetails.java POJO class.
-                                UserDetails user=new UserDetails(name,email,phone,rfid);
-                                myRef.child(mAuth.getUid()).setValue(user);
-                                Toast.makeText(getApplicationContext(),"Verify Email and Login",Toast.LENGTH_SHORT).show();
-                                //Going back to Login class.
-                                openLogin();
+                    //Create user with email and password.
+                    mAuth.createUserWithEmailAndPassword(email, password)
+                            .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                                @Override
+                                public void onComplete(@NonNull Task<AuthResult> task) {
+                                    if (task.isSuccessful()) {
+                                        // Sign in success, update UI with the signed-in user's information
+                                        //Sending the user the email to verify.
+                                        FirebaseUser Fuser = FirebaseAuth.getInstance().getCurrentUser();
+                                        Fuser.sendEmailVerification();
+                                        //Storing name , email , phone , rfid through the UserDetails.java POJO class.
+                                        UserDetails user=new UserDetails(name,email,phone,rfid);
+                                        myRef.child(mAuth.getUid()).setValue(user);
+                                        Toast.makeText(getApplicationContext(),"Verify Email and Login",Toast.LENGTH_SHORT).show();
+                                        //Going back to Login class.
+                                        openLogin();
 
-                            } else {
-                                // If sign in fails, display a message to the user.
-                                Toast.makeText(getApplicationContext(), "Authentication failed.",
-                                        Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    });
+                                    } else {
+                                        // If sign in fails, display a message to the user.
+                                        Toast.makeText(getApplicationContext(), "Authentication failed.",
+                                                Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
+                }
+            }
+
+
         }
+
+
+
+    }
+    //Checks for valid email using inbuild pattern.
+    boolean checkEmail(String email){
+        Pattern pattern = Patterns.EMAIL_ADDRESS;
+        return pattern.matcher(email).matches();
     }
 
+    //Set Error message in editText if some error found or no text entered.
+    void setError(EditText editText){
+        editText.setError("This field can not be blank");
+    }
+    //Function to Check if the entered password contains a pattern or not:
+    // Required:
+    // 1 Alphabet, 1 Number and 1 Special Character
+    // Special Character allowed: ! , @ , # , $,
+    // Minimum length : 6
+    // Maximum Length: 24
+    // Returns true when regex is matched.
+    // Returns false when regex is not matched.
+    public static boolean isValidPassword(String s) {
+        Pattern PASSWORD_PATTERN
+                = Pattern.compile(
+                "[a-zA-Z0-9\\!\\@\\#\\$]{8,24}");
+
+        return !TextUtils.isEmpty(s) && PASSWORD_PATTERN.matcher(s).matches();
+    }
     void openLogin(){
         //Login page opening function.
         startActivity(new Intent(getApplicationContext(),Login.class));
