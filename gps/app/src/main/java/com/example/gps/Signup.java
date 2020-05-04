@@ -19,6 +19,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -160,7 +161,9 @@ public class Signup extends AppCompatActivity {
 
                                     } else {
                                         // If sign in fails, display a message to the user.
-                                        Toast.makeText(getApplicationContext(), "Authentication failed.",
+                                        //Show Proper error message.
+                                        FirebaseAuthException e = (FirebaseAuthException )task.getException();
+                                        Toast.makeText(getApplicationContext(), e.getMessage(),
                                                 Toast.LENGTH_SHORT).show();
                                     }
                                 }

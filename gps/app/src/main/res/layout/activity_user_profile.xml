@@ -63,10 +63,15 @@
     android:layout_marginTop="7dp"
     android:layout_marginBottom="7dp">
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_below="@+id/profileName"
+        android:layout_alignParentLeft="true"
         android:scaleX="1.2"
         android:scaleY="1.2"
         android:src="@drawable/ic_person_black"
@@ -77,8 +82,16 @@
         android:id="@+id/userProfileName"
         android:text="John Doe"
         android:textSize="20dp"
-
+        android:layout_marginStart="34sp"
         />
+    <ImageView
+        android:id="@+id/editNameProfile"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:src="@drawable/ic_edit_black"
+        android:layout_alignParentRight="true"
+        />
+    </RelativeLayout>
 </LinearLayout>
     <View
         android:layout_width="match_parent"
@@ -139,6 +152,11 @@
         android:layout_marginTop="7dp"
         android:layout_marginBottom="7dp"
         >
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -153,7 +171,16 @@
             android:id="@+id/userProfilePhone"
             android:text="1234567890"
             android:textSize="20dp"
+            android:layout_marginStart="34sp"
             />
+            <ImageView
+                android:id="@+id/editPhoneProfile"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_edit_black"
+                android:layout_alignParentRight="true"
+                />
+        </RelativeLayout>
     </LinearLayout>
     <View
         android:layout_width="match_parent"

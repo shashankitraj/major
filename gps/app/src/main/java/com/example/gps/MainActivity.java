@@ -1,6 +1,7 @@
 package com.example.gps;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -9,6 +10,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -87,6 +89,10 @@ public class MainActivity extends AppCompatActivity {
     boolean flag=false;//Used to check if the users card is scanned or not.
     boolean isFlag=false; // used to check if there are any entry in thinkspeak of the current users UID number . IF not done the app is stuck in checking mode finding the number.
     //Once the card is scanned then flag is set true.
+    boolean speedUpdate=false;//used to send update to the user if the vechicle is overspeeding.
+    //sends the message once in the session.
+    private DatabaseReference dbRefUser;//used to fetch user number
+    private String userNum="";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -132,6 +138,19 @@ public class MainActivity extends AppCompatActivity {
         dbRef=database.getReference("Gps Details");
         userRef=database.getReference("User Details");
         uref=database.getReference("Uid");
+        dbRefUser=database.getReference("User Details").child(mAuth.getUid());
+        dbRefUser.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                UserDetails u=new UserDetails();
+                u=dataSnapshot.getValue(UserDetails.class);
+                userNum=u.getPhone();
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     //creating menu for topbar
@@ -372,7 +391,7 @@ public class MainActivity extends AppCompatActivity {
     }
     //function called when the user press the button for getting location.
     //location manager checks the location permission.
-    //updates location if location is updatd by 10 meters or in (2*60*1000) seconds.
+    //updates location if location is updated by 10 meters or in (2*60*1000) seconds.
     // locationListenerGPS is called through location manager for accessing data from gps as a location object.
     @SuppressLint("MissingPermission")
     public void toggleGPSUpdates() {
@@ -434,6 +453,19 @@ public class MainActivity extends AppCompatActivity {
                     speedValueGPS.setText(numberFormat.format(speed)+" m/s");
                     altitudeValueGPS.setText(altitude+" m");
                     Toast.makeText(MainActivity.this, "GPS Provider update", Toast.LENGTH_SHORT).show();
+                    if(speed>80 && speedUpdate==false){
+
+                        try{
+                            PendingIntent sentIntent = null, deliveryIntent = null;
+                            SmsManager smsManager = SmsManager.getDefault();
+                            smsManager.sendTextMessage
+                                    (userNum, null, "Your Vehicle was speeding at speeds greater than 80 on"+getDate()+" "+getTime(),
+                                            sentIntent, deliveryIntent);
+                        }
+                        catch(Exception e){
+                            Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
                 }
             });
             String d=getDate();//get current date

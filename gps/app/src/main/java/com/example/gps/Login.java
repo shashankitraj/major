@@ -16,6 +16,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthException;
 
 import java.util.regex.Pattern;
 
@@ -28,7 +29,7 @@ import java.util.regex.Pattern;
 */
 public class Login extends AppCompatActivity {
     //Variables for UI Elements and Firebase Auth instance.
-    TextView textView;
+    TextView textView,textView1;
     EditText etEmail,etPassword;
     Button btnLogin;
     private FirebaseAuth mAuth;
@@ -44,6 +45,7 @@ public class Login extends AppCompatActivity {
                 openSignup();
             }
         });
+        textView1=findViewById(R.id.textViewResetPassword);
         mAuth=FirebaseAuth.getInstance();
         if(mAuth.getCurrentUser()!=null && mAuth.getCurrentUser().isEmailVerified()){
             //Checking if the app already has the user registered and the email is verified.
@@ -57,6 +59,12 @@ public class Login extends AppCompatActivity {
             public void onClick(View v) {
                 userLogin();
 
+            }
+        });
+        textView1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(),PasswordReset.class));
             }
         });
     }
@@ -96,14 +104,15 @@ public class Login extends AppCompatActivity {
                         }
                         else{
                             //Toast for auth failed.
-                            Toast.makeText(getApplicationContext(),"Authentication Failed",Toast.LENGTH_SHORT).show();
+                            //Show Proper error message.
+                            FirebaseAuthException e = (FirebaseAuthException )task.getException();
+                            Toast.makeText(getApplicationContext(),e.getMessage(),Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
             }
 
         }
-
     }
     //Checks for valid email using inbuild pattern.
     boolean checkEmail(String email){
