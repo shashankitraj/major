@@ -70,6 +70,7 @@ import java.util.Date;
           --email
 */
 public class MainActivity extends AppCompatActivity {
+    private static final double THRESHOLD_SPEED = 80 ;//Max Limit of Speed
     LocationManager locationManager;//Location Manager for GPS of the mobile
     double longitudeGPS, latitudeGPS;//Stores the latitude and longitude
     double speed,altitude;// Speed and altitude
@@ -169,8 +170,9 @@ public class MainActivity extends AppCompatActivity {
             startActivity(new Intent(getApplicationContext(),UserProfile.class));
             return(true);
         case R.id.exit:
-            this.finish();
-            moveTaskToBack(true);
+            startActivity(new Intent(getApplicationContext(),MapsActivity.class));
+            //this.finish();
+            //moveTaskToBack(true);
             return(true);
 
     }
@@ -447,13 +449,13 @@ public class MainActivity extends AppCompatActivity {
                     else {
                         ew="W";
                     }
-                    DecimalFormat numberFormat = new DecimalFormat("#.00");
+                    DecimalFormat numberFormat = new DecimalFormat("0.00");
                     longitudeValueGPS.setText(numberFormat.format(longitudeGPS) + " \u00B0 " +ns);
                     latitudeValueGPS.setText(numberFormat.format(latitudeGPS) + " \u00B0 " +ew);
                     speedValueGPS.setText(numberFormat.format(speed)+" m/s");
                     altitudeValueGPS.setText(altitude+" m");
                     Toast.makeText(MainActivity.this, "GPS Provider update", Toast.LENGTH_SHORT).show();
-                    if(speed>80 && speedUpdate==false){
+                    if((speed*3.6)>THRESHOLD_SPEED && speedUpdate==false){
 
                         try{
                             PendingIntent sentIntent = null, deliveryIntent = null;

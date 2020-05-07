@@ -27,7 +27,8 @@ public class GpsDetails {
         this.time=time;
         this.email=email;
     }
-
+    //Empty constructor
+    public GpsDetails(){}
     //Getter and setter for all global variables.
 
     public String getEmail() {

@@ -10,8 +10,8 @@
     </item>
     <item
         android:id="@+id/exit"
-        android:title="Exit"
-        android:icon="@drawable/ic_clear_black"
-        app:showAsAction="never">
+        android:title="Map"
+        android:icon="@drawable/ic_map_black"
+        app:showAsAction="always">
     </item>
 </menu>
