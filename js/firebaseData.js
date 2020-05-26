@@ -69,7 +69,6 @@ async function getData() {
           dateToday.push(grandchildren.date);
           timeToday.push(grandchildren.time);
           speedToday.push(grandchildren.speed);
-
         }
         if (parseInt(da) + 7 >= parseInt(day) && (mon == month || parseInt(day) < 7)) {
           altiWeek.push(grandchildren.altitude);
@@ -132,7 +131,34 @@ function initMap() {
 
   var marker = new google.maps.Marker({ position: tumkur, map: map });
 }
-
+//stats display of main page.
+var di_date=document.getElementById('display_date');
+var di_time=document.getElementById('display_time');
+var di_speed=document.getElementById('display_speed');
+var di_altitude=document.getElementById('display_altitude');
+var di_distance=document.getElementById('display_distance');
+di_date.innerHTML += 'Extra stuff';
+function distance(lat1, lon1, lat2, lon2, unit) {
+	if ((lat1 == lat2) && (lon1 == lon2)) {
+		return 0;
+	}
+	else {
+		var radlat1 = Math.PI * lat1/180;
+		var radlat2 = Math.PI * lat2/180;
+		var theta = lon1-lon2;
+		var radtheta = Math.PI * theta/180;
+		var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+		if (dist > 1) {
+			dist = 1;
+		}
+		dist = Math.acos(dist);
+		dist = dist * 180/Math.PI;
+		dist = dist * 60 * 1.1515;
+		if (unit=="K") { dist = dist * 1.609344 }
+		if (unit=="N") { dist = dist * 0.8684 }
+		return dist;
+	}
+}
 /* Use when required to access time.
          var hour = now.getHours();
          var minute = now.getMinutes();

@@ -16,6 +16,14 @@
   <link rel="stylesheet" href="css/styleForm.css" />
   <link rel="stylesheet" href="skin/default.css" />
   <script src="https://www.gstatic.com/firebasejs/7.9.3/firebase.js"></script>
+  <!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
 </head>
 
@@ -31,8 +39,8 @@
         </button>
       </div>
       <div class="navbar-collapse collapse">
-        <ul class="nav navbar-nav" data-0="margin-top:20px;" data-300="margin-top:5px;">
-          <li class="active"><a href="#intro">Home</a></li>
+        <ul class="nav navbar-nav" data-0="margin-top:20px;" style="float: right;" data-300="margin-top:5px;">
+          <li ><a href="#intro">Home</a></li>
           <li><a href="#section-data">Data</a></li>
           <li><a href="#section-contact">Contact</a></li>
           <li><a id="testMe">Log Out</a></li>
@@ -106,18 +114,53 @@
           </div>
         </div>
       </div>
-      <div class="input-group mb-3">
-        <select class="custom-select" id="inputGroupSelect" style="display:inline-block;">
+      <div class="input-group mb-3 dropdown text-center" style="margin-left: 480px;">
+        <select class="custom-select" id="inputGroupSelect" style="display:inline-block; height:30px;">
           <option selected>Choose...</option>
           <option value="1">Today</option>
           <option value="2">Past Week</option>
           <option value="3">Past Month</option>
         </select>
+        <div class="divide" style="display:inline-block;"></div>
+        <div class="divide" style="display:inline-block;"></div>
+        <div class="divide" style="display:inline-block;"></div>
         <div class="input-group-prepend" style="display:inline-block;">
           <button class="btn btn-outline-secondary" type="button" onclick="setPath()">Button</button>
         </div>
       </div>
-
+      <br>
+      <br>
+      <div class="card-columns" style="margin-left: 220px;">
+        <div class="card bg-primary" style="width: 700px;">
+          <div class="card-body text-center">
+            <p class="card-text" id="display_date">Date of last travel: </p>
+          </div>
+        </div>
+        <br>
+        <div class="card bg-primary" style="width: 700px;">
+          <div class="card-body text-center">
+            <p class="card-text" id="display_time">Time of last travel: </p>
+          </div>
+        </div>
+        <br>
+        <div class="card bg-primary" style="width: 700px;">
+          <div class="card-body text-center">
+            <p class="card-text" id="display_distance">Total distance travelled:</p>
+          </div>
+        </div>
+        <br>
+        <div class="card bg-primary" style="width: 700px;">
+          <div class="card-body text-center">
+            <p class="card-text" id="display_speed">Last speed recorded: </p>
+          </div>
+        </div>
+        <br>
+        <div class="card bg-primary" style="width: 700px;">
+          <div class="card-body text-center">
+            <p class="card-text" id="display_altitude">Last altitude recorded: </p>
+          </div>
+        </div>
+      </div>
       <hr size="30" />
     </div>
   </section>
@@ -136,7 +179,6 @@
             <label>Name</label>
             <input type="text" name="name" id="name" required>
           </p>
-          
           <p>
             <label>Email Address</label>
             <input type="email" name="email" id="email" required>
