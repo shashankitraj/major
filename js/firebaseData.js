@@ -1,18 +1,4 @@
-async function getData() {
-  var userUid;
-  var userU;
-  firebase.auth().onAuthStateChanged((user) => {
-    if (user) {
-      // User logged in already or has just logged in.
-      //getting the uid of the user
-      userUid = user.uid;
-      //getting reference for the user
-      userU = user;
-    } else {
-      // User not logged in or has just logged out.
-    }
-  });
-  //data is fetched in 3 arrays :
+//data is fetched in 3 arrays :
   // --today
   // --past week
   // --past month
@@ -38,8 +24,23 @@ async function getData() {
   var timeMonth = [];//stores time for month
 
   //Finding the current users gps details.
+function getData() {
+  var userUid;
+  var userU;
+  firebase.auth().onAuthStateChanged((user) => {
+    if (user) {
+      // User logged in already or has just logged in.
+      //getting the uid of the user
+      userUid = user.uid;
+      //getting reference for the user
+      userU = user;
+    } else {
+      // User not logged in or has just logged out.
+    }
+  });
+  
   var ref = firebase.database().ref("Gps Details");
-  await ref.once("value", gotData);
+ ref.once("value", gotData);
   function gotData(data) {
     var usrData = data.val();
     for (var child in usrData) {
@@ -51,7 +52,6 @@ async function getData() {
           var year = now.getFullYear();
           var month = now.getMonth() + 1;
           var day = now.getDate();
-
           if (month.toString().length == 1) {
             month = '0' + month;
           }
@@ -59,10 +59,10 @@ async function getData() {
             day = '0' + day;
           }
           var dateD = year + "-" + month + "-" + day;
+          var mon = grandchildren.date.substring(5, 7);
+          var da = grandchildren.date.substring(8, 10);
         }
-        var mon = grandchildren.date.substring(5, 7);
-        var da = grandchildren.date.substring(8, 10);
-        if (grandchildren.date == dateD) {
+        if (grandchildren.date == dateD && grandchildren.email==userU.email) {
           altiToday.push(grandchildren.altitude);
           latiToday.push(grandchildren.latitude);
           longiToday.push(grandchildren.longitude);
@@ -70,15 +70,16 @@ async function getData() {
           timeToday.push(grandchildren.time);
           speedToday.push(grandchildren.speed);
         }
-        if (parseInt(da) + 7 >= parseInt(day) && (mon == month || parseInt(day) < 7)) {
+        if (parseInt(da) + 7 >= parseInt(day) && (mon == month || parseInt(day) < 7) && grandchildren.email==userU.email) {
           altiWeek.push(grandchildren.altitude);
           latiWeek.push(grandchildren.latitude);
           longiWeek.push(grandchildren.longitude);
           dateWeek.push(grandchildren.date);
           timeWeek.push(grandchildren.time);
           speedWeek.push(grandchildren.speed);
+          console.log()
         }
-        if (parseInt(mon) + 1 >= parseInt(month)) {
+        if (parseInt(mon) + 1 >= parseInt(month) && grandchildren.email==userU.email) {
           altiMonth.push(grandchildren.altitude);
           latiMonth.push(grandchildren.latitude);
           longiMonth.push(grandchildren.longitude);
@@ -87,12 +88,8 @@ async function getData() {
           speedMonth.push(grandchildren.speed);
         }
       }
-
-    }
-
-
-  }
-
+}
+}
 }
 var points = [];
 function setPath() {
@@ -102,11 +99,9 @@ function setPath() {
   if (output == 1) {
     for (var i = 0; i < latiToday.length; i++) {
       points.push(new google.maps.LatLng(latiToday[i], longiToday[i]));
+      console.log(points[i]);
     }
   }
-  console.log(points);
-
-
 }
 function initMap() {
   var tumkur = { lat: 13.3269, lng: 77.1261 };
@@ -137,7 +132,8 @@ var di_time=document.getElementById('display_time');
 var di_speed=document.getElementById('display_speed');
 var di_altitude=document.getElementById('display_altitude');
 var di_distance=document.getElementById('display_distance');
-di_date.innerHTML += 'Extra stuff';
+di_date.innerHTML += '';
+
 function distance(lat1, lon1, lat2, lon2, unit) {
 	if ((lat1 == lat2) && (lon1 == lon2)) {
 		return 0;
