@@ -51,7 +51,7 @@
 
   <section id="intro">
     <div class="intro-content">
-      <h2>Smart Vehicle System</h2>
+      <h2>Smart Fleet Management</h2>
       <h3>
         It is amazing to know how simple ideas can give a whole new dimension
         to the tracking and navigation industry and smart vehicle tracking
@@ -163,6 +163,38 @@
         </div>
       </div>
       <hr size="30" />
+      <div class="card-columns" id="temp" style="margin-left: 220px;">
+        <div class="card bg-info" style="width: 700px;">
+          <div class="card-body text-center">
+            <p class="card-text" id="display_date1">Date of last travel: </p>
+          </div>
+        </div>
+        <br>
+        <div class="card bg-info" style="width: 700px;">
+          <div class="card-body text-center">
+            <p class="card-text" id="display_time1">Time of last travel: </p>
+          </div>
+        </div>
+        <br>
+        <div class="card bg-info" style="width: 700px;">
+          <div class="card-body text-center">
+            <p class="card-text" id="display_distance1">Total distance travelled:</p>
+          </div>
+        </div>
+        <br>
+        <div class="card bg-info" style="width: 700px;">
+          <div class="card-body text-center">
+            <p class="card-text" id="display_speed1">Last speed recorded: </p>
+          </div>
+        </div>
+        <br>
+        <div class="card bg-info" style="width: 700px;">
+          <div class="card-body text-center">
+            <p class="card-text" id="display_altitude1">Last altitude recorded: </p>
+          </div>
+        </div>
+      </div>
+      
     </div>
   </section>
 
@@ -219,7 +251,11 @@
       }
     </script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB6tZLLKeJKhGAQYKRP8genndbH01vW81I&callback=myMap"></script> -->
-
+    <script>
+     var di= document.getElementById("temp");
+     di.style.visibility = 'hidden';
+     di.style.display = 'none';
+      </script> 
   <script src="js/modernizr-2.6.2-respond-1.1.0.min.js"></script>
   <script src="js/jquery.js"></script>
   <script src="js/jquery.easing.1.3.js"></script>

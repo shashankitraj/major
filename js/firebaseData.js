@@ -23,6 +23,13 @@ var speedMonth = []; //stores the speed for month
 var dateMonth = []; //store date for month
 var timeMonth = []; //stores time for month
 
+//2nd stats
+var di=document.getElementById("temp");
+var di_date1 = document.getElementById("display_date1");
+var di_time1 = document.getElementById("display_time1");
+var di_speed1 = document.getElementById("display_speed1");
+var di_altitude1 = document.getElementById("display_altitude1");
+var di_distance1 = document.getElementById("display_distance1");
 //stats display of main page.
 var di_date = document.getElementById("display_date");
 var di_time = document.getElementById("display_time");
@@ -107,6 +114,17 @@ function getData() {
 }
 var points = [];
 function setPath() {
+  
+  di_date.innerHTML= "";
+  di_time.innerHTML ="";
+  di_altitude.innerHTML = "";
+  di_distance.innerHTML =  "";
+    di_speed.innerHTML = "";
+    di_date.innerHTML= "Date of last travel:";
+    di_time.innerHTML ="Time of last travel:";
+    di_altitude.innerHTML = "Last altitude recorded:";
+    di_distance.innerHTML =  "Total distance travelled: ";
+      di_speed.innerHTML = "Last speed recorded:";
   // console.log(latiToday.length);
   selectElement = document.querySelector("#inputGroupSelect");
   output = selectElement.value;
@@ -118,6 +136,8 @@ function setPath() {
   });
 
   if (output == 1) {
+    di.style.visibility = 'hidden';
+     di.style.display = 'none';
     for (var i = 0; i < latiToday.length; i++) {
       points.push(new google.maps.LatLng(latiToday[i], longiToday[i]));
     }
@@ -144,6 +164,8 @@ function setPath() {
     flightPath.setMap(map);
   }
   if (output == 2) {
+    di.style.visibility = 'hidden';
+     di.style.display = 'none';
     for (var i = 0; i < latiWeek.length; i++) {
       points.push(new google.maps.LatLng(latiWeek[i], longiWeek[i]));
     }
@@ -170,6 +192,8 @@ function setPath() {
     flightPath.setMap(map);
   }
   if (output == 3) {
+    di.style.visibility = 'hidden';
+     di.style.display = 'none';
     for (var i = 0; i < latiMonth.length; i++) {
       points.push(new google.maps.LatLng(latiMonth[i], longiMonth[i]));
     }
@@ -196,29 +220,52 @@ function setPath() {
     flightPath.setMap(map);
   }
   if (output == 4) {
+    di.style.visibility = 'visible';
+    di.style.display = 'block';
     var mypoints = [
       new google.maps.LatLng(22.812369, 86.16183),
       new google.maps.LatLng(22.814051, 86.161578),
       new google.maps.LatLng(22.815745, 86.173252),
       new google.maps.LatLng(22.813839, 86.177067),
     ];
-    di_date.innerHTML += "2020-05-26";
+    var mypoints1 = [
+      new google.maps.LatLng(22.817445, 86.171803),
+      new google.maps.LatLng(22.817445, 86.171803),
+      new google.maps.LatLng(22.821384, 86.173919),
+      new google.maps.LatLng(22.819881, 86.175528),
+    ];
+    di_date.innerHTML += "2020-07-26";
     di_time.innerHTML += "09:10:46";
-    di_altitude.innerHTML += 97;
+    di_altitude.innerHTML +="99 M";
     var dist = distance(22.814051, 86.161578, 22.815745, 86.173252, "K");
     di_distance.innerHTML += dist + "KM";
-    di_speed.innerHTML += "34";
+    di_speed.innerHTML += "21 KM/HR";
+    
+    di_date1.innerHTML += "2020-07-26";
+    di_time1.innerHTML += "09:18:46";
+    di_altitude1.innerHTML +="99 M";
+    var dist = distance(22.817445, 86.171803, 22.819881, 86.175528, "K");
+    di_distance1.innerHTML += dist + "KM";
+    di_speed1.innerHTML += "34 KM/HR";
     var flightPath = new google.maps.Polyline({
       path: mypoints,
       strokeWeight: 7,
-      strokeColor: "#ffae00",
+      strokeColor: "#337AB7",
     });
+    var flightPath1 = new google.maps.Polyline({
+      path: mypoints1,
+      strokeWeight: 7,
+      strokeColor: "#17A2B8",
+    });
+    
     flightPath.setMap(null);
     flightPath.setMap(map);
+    flightPath1.setMap(null);
+    flightPath1.setMap(map);
   }
 }
 function initMap() {
-  var jsr = { lat: 22.811106, lng: 86.167485 };
+  var jsr = { lat: 22.817655, lng: 86.170762 };
   var map = new google.maps.Map(document.getElementById("map"), {
     zoom: 15,
     center: jsr,
@@ -271,7 +318,7 @@ function distance(lat1, lon1, lat2, lon2, unit) {
     if (unit == "N") {
       dist = dist * 0.8684;
     }
-    return dist;
+    return dist.toFixed(2);
   }
 }
 /* Use when required to access time.
